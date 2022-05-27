@@ -18,4 +18,8 @@ def calculate_routes():
     matrix = params["matrix"]
     jobs = params["jobs"]
 
-    routes, cost = vrp_solver(vehicles, matrix, jobs)
+    vrp_solver(vehicles, matrix, jobs)
+
+
+if __name__ == '__main__':
+    serve(app, host='0.0.0.0', port=3000, threads=1)

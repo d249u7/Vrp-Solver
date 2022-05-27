@@ -10,7 +10,10 @@ def get_routes(file_path="./input.json"):
     except (OSError, IOError) as e:
         raise Exception(f"File could not be read. \n\n{e}")
 
-    URL = "http://localhost:3000"
-    response = requests.post(URL, data=inputs)
+    URL = "http://localhost:3000/get_routes"
+    response = requests.post(URL, json=inputs)
 
     print(response)
+
+
+get_routes()
