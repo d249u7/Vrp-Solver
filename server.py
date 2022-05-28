@@ -18,7 +18,9 @@ def calculate_routes():
     matrix = params["matrix"]
     jobs = params["jobs"]
 
-    vrp_solver(vehicles, matrix, jobs)
+    routes = vrp_solver(vehicles, matrix, jobs)
+    print(routes)
+    return routes
 
 
 if __name__ == '__main__':

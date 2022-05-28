@@ -13,7 +13,7 @@ def get_routes(file_path="./input.json"):
     URL = "http://localhost:3000/get_routes"
     response = requests.post(URL, json=inputs)
 
-    print(response)
+    return response
 
 
-get_routes()
+print(get_routes())
