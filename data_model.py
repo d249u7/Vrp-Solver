@@ -61,11 +61,11 @@ def map_end_locations_to_vehicles(number_of_vehicles):
     return [0 for _ in range(number_of_vehicles)]
 
 
-def create_data_model(vehicles, jobs):
+def create_data_model(vehicles, jobs, time_matrix):
 
     number_of_vehicles = len(vehicles)
     time_matrix = add_nonexistent_depot(time_matrix)
-    service_durations = map_service_to_location(vehicles, len(time_matrix[0]))
+    service_durations = map_service_to_location(jobs, len(time_matrix[0]))
     demands = map_demand_to_location(jobs, len(time_matrix[0]))
     vehicle_capacities = map_capacity_to_vehicles(
         vehicles, number_of_vehicles)
@@ -74,6 +74,7 @@ def create_data_model(vehicles, jobs):
     end_locations = map_end_locations_to_vehicles(number_of_vehicles)
 
     # Define an arbitrary duration constraint for each vehicle
+    # This would be equal to working hours in a real-life implementation
     time_constraint = randint(3000, 5000)
 
     return number_of_vehicles, time_matrix, service_durations, demands, vehicle_capacities, start_locations, end_locations, time_constraint
