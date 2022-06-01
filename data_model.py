@@ -1,4 +1,5 @@
 from random import randint
+import time
 
 # Add a node that has 0 travel time to any node
 # Which is equivalent to not having a depot
@@ -19,23 +20,23 @@ def add_nonexistent_depot(matrix):
 def map_service_to_location(jobs, number_of_nodes):
     # This will ensure each node exists in the final list
     # But with an insignificant value if there's no service required
-    service_durations = {i: 0 for i in range(1, number_of_nodes+1)}
+    service_durations = [0 for _ in range(number_of_nodes)]
 
     for job in jobs:
-        service_durations[job["location_index"]] = job["service"]
+        service_durations[job["location_index"]+1] = job["service"]
 
-    return list(service_durations.values())
+    return service_durations
 
 
 def map_demand_to_location(jobs, number_of_nodes):
-    demands = {i: 0 for i in range(1, number_of_nodes+1)}
+    demands = [0 for _ in range(number_of_nodes)]
 
     for job in jobs:
         # Delivery is a list but I am not sure what multiple
         # entries mean so I am treating it as a number
-        demands[job["location_index"]] += job["delivery"][0]
+        demands[job["location_index"]+1] += job["delivery"][0]
 
-    return list(demands.values())
+    return demands
 
 
 def map_capacity_to_vehicles(vehicles, number_of_vehicles):
@@ -61,8 +62,21 @@ def map_end_locations_to_vehicles(number_of_vehicles):
     return [0 for _ in range(number_of_vehicles)]
 
 
-def create_data_model(vehicles, jobs, time_matrix):
+def get_job_locations(jobs):
+    return [job["location_index"]+1 for job in jobs]
 
+
+def get_max_time(time_matrix):
+    max_time = 0
+    for i in time_matrix:
+        mt = max(i)
+        if mt > max_time:
+            max_time = mt
+
+    return max_time
+
+
+def create_data_model(vehicles, jobs, time_matrix):
     number_of_vehicles = len(vehicles)
     time_matrix = add_nonexistent_depot(time_matrix)
     service_durations = map_service_to_location(jobs, len(time_matrix[0]))
@@ -72,9 +86,11 @@ def create_data_model(vehicles, jobs, time_matrix):
     start_locations = map_start_locations_to_vehicles(
         vehicles, number_of_vehicles)
     end_locations = map_end_locations_to_vehicles(number_of_vehicles)
+    job_locations = get_job_locations(jobs)
+    max_time = get_max_time(time_matrix)
 
     # Define an arbitrary duration constraint for each vehicle
     # This would be equal to working hours in a real-life implementation
-    time_constraint = randint(3000, 5000)
+    time_constraint = 2000
 
-    return number_of_vehicles, time_matrix, service_durations, demands, vehicle_capacities, start_locations, end_locations, time_constraint
+    return number_of_vehicles, time_matrix, service_durations, demands, vehicle_capacities, start_locations, end_locations, time_constraint, job_locations, max_time

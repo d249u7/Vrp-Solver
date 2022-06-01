@@ -16,4 +16,9 @@ def get_routes(file_path="./input.json"):
     return response
 
 
-print(get_routes())
+result = get_routes()
+print(result.json())
+
+# write the response to a file
+with open("./routes.json", "w") as output_file:
+    json.dump(result.json(), output_file, ensure_ascii=False, indent=4)
